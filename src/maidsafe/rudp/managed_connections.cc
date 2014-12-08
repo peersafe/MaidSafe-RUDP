@@ -168,8 +168,8 @@ void ManagedConnections::ClearConnectionsAndIdleTransports() {
   std::lock_guard<std::mutex> lock(mutex_);
   if (!connections_.empty()) {
     for (auto connection_details : connections_) {
-      assert(connection_details.second->GetConnection(connection_details.first)->state() ==
-             detail::Connection::State::kBootstrapping);
+      //assert(connection_details.second->GetConnection(connection_details.first)->state() ==
+      //       detail::Connection::State::kBootstrapping);
       connection_details.second->Close();
     }
     connections_.clear();
