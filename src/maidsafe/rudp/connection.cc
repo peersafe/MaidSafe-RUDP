@@ -215,12 +215,7 @@ void Connection::StartSending(const std::string& data,
     // This needs to go away and save another memory copy.
     strand_.post(
         std::bind(&Connection::DoQueueSendRequest, shared_from_this(),
-                  SendRequest(
-#ifdef TESTING
-                      !Parameters::rudp_encrypt ? data :
-#endif
-                          asymm::Encrypt(asymm::PlainText(data), *socket_.PeerPublicKey()).string(),
-                      message_sent_functor)));
+                  SendRequest(data, message_sent_functor)));
   }
   catch (const std::exception& e) {
     LOG(kError) << "Failed to encrypt message: " << e.what();
@@ -247,7 +242,7 @@ void Connection::FinishSendAndQueueNext() {
 
 void Connection::DoStartSending(SendRequest const& request) {
   sending_ = true;
-  const std::function<void(int)>& message_sent_functor = request.message_sent_functor_;  // NOLINT
+  const std::function<void(int)> message_sent_functor = request.message_sent_functor_;  // NOLINT
   MessageSentFunctor wrapped_functor([this, message_sent_functor](int result) {
     InvokeSentFunctor(message_sent_functor, result);
   });

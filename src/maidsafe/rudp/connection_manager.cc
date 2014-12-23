@@ -89,7 +89,7 @@ bool ConnectionManager::CanStartConnectingTo(NodeId peer_id, Endpoint peer_ep) c
   return std::find_if( being_connected_.begin()
                      , being_connected_.end()
                      , [&](const std::pair<NodeId, Endpoint>& pair) {
-                       if (peer_id.IsZero() || pair.first.IsZero() || peer_id == pair.first) {
+                       if (!peer_id.IsValid() || !pair.first.IsValid() || peer_id == pair.first) {
                          return pair.second == peer_ep;
                        }
                        return false;
@@ -100,7 +100,7 @@ void ConnectionManager::MarkDoneConnecting(NodeId peer_id, Endpoint peer_ep) {
   auto j = being_connected_.begin();
   for (auto i = being_connected_.begin(); i != being_connected_.end(); i = j) {
     ++j;
-    if (peer_id.IsZero() || i->first.IsZero() || peer_id == i->first) {
+    if (!peer_id.IsValid() || !i->first.IsValid() || peer_id == i->first) {
       if (peer_ep == i->second) {
         being_connected_.erase(i);
       }
@@ -204,7 +204,9 @@ bool ConnectionManager::Send(const NodeId& peer_id, const std::string& message,
 
   ConnectionPtr connection(*itr);
   lock.unlock();
-  strand_.dispatch([=] { connection->StartSending(message, message_sent_functor); });
+  // using COW std::string will cause thread sanitizer warning of data racing
+  std::shared_ptr<std::string> message_ptr(new std::string(message.data(), message.size()));
+  strand_.dispatch([=] { connection->StartSending(*message_ptr, message_sent_functor); });
   return true;
 }
 
