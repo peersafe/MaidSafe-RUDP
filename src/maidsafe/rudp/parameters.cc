@@ -53,7 +53,7 @@ uint32_t Parameters::slow_speed_threshold(1024);
 Timeout Parameters::rendezvous_connect_timeout(bptime::seconds(15));
 Timeout Parameters::bootstrap_connect_timeout(bptime::seconds(5));
 Timeout Parameters::ping_timeout(bptime::seconds(5));
-Timeout Parameters::keepalive_interval(bptime::milliseconds(500));
+Timeout Parameters::keepalive_interval(bptime::milliseconds(1000));
 Timeout Parameters::keepalive_timeout(bptime::milliseconds(400));
 uint32_t Parameters::maximum_keepalive_failures(20);
 uint32_t Parameters::maximum_handshake_failures(40);
