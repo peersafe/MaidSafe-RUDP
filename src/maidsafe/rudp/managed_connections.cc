@@ -684,7 +684,7 @@ void ManagedConnections::Send(NodeId peer_id, std::string message,
 }
 
 void ManagedConnections::OnMessageSlot(const std::string& message) {
-  LOG(kVerbose) << "\n^^^^^^^^^^^^ OnMessageSlot ^^^^^^^^^^^^\n" + DebugString();
+  //LOG(kVerbose) << "\n^^^^^^^^^^^^ OnMessageSlot ^^^^^^^^^^^^\n" + DebugString();
 
   try {
     auto copied_message(std::make_shared<std::string>(message));
@@ -832,8 +832,8 @@ void ManagedConnections::OnNatDetectionRequestedSlot(const Endpoint& this_local_
 std::string ManagedConnections::DebugString() const {
   std::lock_guard<std::mutex> lock(mutex_);
   // Not interested in the log once accumulated enough connections
-  if (connections_.size() > 8)
-    return "";
+  //if (connections_.size() > 8)
+  //  return "";
 
 //  std::string s = "This node's peer connections:\n";
   std::set<TransportPtr> transports;
