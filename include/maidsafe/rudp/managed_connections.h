@@ -90,7 +90,7 @@ class ManagedConnections {
   ManagedConnections();
   ~ManagedConnections();
 
-  static int32_t kMaxMessageSize() { return 2097152; }
+  static int32_t kMaxMessageSize() { return 2097152 * 5; }
   static unsigned short kResiliencePort() { return kLivePort; }  // NOLINT (Fraser)
 
   // Creates a new transport object and bootstraps it to one of the provided bootstrap_endpoints.
