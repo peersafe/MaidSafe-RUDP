@@ -357,7 +357,14 @@ void Session::SendConnectionRequest() {
                                     !OnPrivateNetwork(peer_.PeerEndpoint()));
 
   LOG(kInfo) << DebugId(this_node_id_) << " sending initial handshake packet to "
-    << DebugId(peer_.node_id()) << " with my cookie syn " << my_cookie_syn_;
+    << DebugId(peer_.node_id()) << "(" << peer_.PeerEndpoint() << ")" 
+    << " with my cookie syn " << my_cookie_syn_;
+  //track
+  {
+      std::cout << DebugId(this_node_id_) << " sending initial handshake packet to "
+          << DebugId(peer_.node_id()) << "(" << peer_.PeerEndpoint() << ")"
+          << " with my cookie syn " << my_cookie_syn_ << std::endl;
+  }
   int result(peer_.Send(packet));
   if (result != kSuccess)
     LOG(kError) << DebugId(this_node_id_) << " Failed to send handshake to "

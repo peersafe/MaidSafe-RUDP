@@ -170,6 +170,12 @@ void ManagedConnections::ClearConnectionsAndIdleTransports() {
     for (auto connection_details : connections_) {
       auto connection_ptr(connection_details.second->GetConnection(connection_details.first));
       if (connection_ptr) {
+        if(connection_ptr->state() != detail::Connection::State::kBootstrapping)
+            std::cout << "breakpoint" << std::endl;
+        static int count = 0;
+        count ++;
+        if(count > 1) 
+            std::cout << "breakpoint" << std::endl;
         assert(connection_ptr->state() == detail::Connection::State::kBootstrapping);
         connection_details.second->Close();
       }
